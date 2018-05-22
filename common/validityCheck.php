@@ -31,9 +31,10 @@ function strValidityCheck($str){
     return empty($stack) ? true : false;     
 }
 
-$str = '[12+23][]]sjsjsj{}';  
+//$str = '[12+23][]]sjsjsj{}';  
 //$str = '[]12121[{]}';  
 //$str = '11';  
+//$str = '([]))';  
 var_dump(strValidityCheck($str));
 
 
