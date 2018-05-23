@@ -2,11 +2,11 @@
 #include <cstdio>
 using namespace std;
 
-//Fcuntion to select minIndex to swap
+//Fcuntion to insert sort
 int * insertSort(int *A ,int n){
 	for(int i = 1; i < n; i++){
 		for(int j = i; j > 0; j--){
-			if(A[j] > A[j-1]){
+			if(A[j] < A[j-1]){
 				swap(A[j],A[j-1]);
 			}
 		}
