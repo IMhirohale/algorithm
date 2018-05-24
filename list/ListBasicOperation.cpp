@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstdio>
 #include <stdlib.h> 
+#include<stack>
+
 using namespace std;
 
 typedef struct Node{
@@ -26,6 +28,8 @@ void createListByHead(LinkList &L){
 		
 		scanf("%d",&x);
 	}
+	
+	L = L->next;//抛弃头结点
 
 }
 
@@ -49,6 +53,7 @@ void createListByEnd(LinkList &L){
 	}
 
 	r->next = NULL;
+	L = L->next;//抛弃头结点
 }
 
 // 打印链表
@@ -160,14 +165,74 @@ void removeLastKthNode(LinkList &L, int lastKth){
 	
 }
 
+//判断一个链表是否是回文结构
+//使用栈的方式
+bool isPalindromeList(LinkList L){
+	
+	stack<int> stack;//定义一个栈
+	LNode *cur;
+	cur = L;
+
+	while(cur != NULL){
+		stack.push(cur->data);	
+		cur = cur->next;
+	}
+
+	while(L != NULL){
+		if(L->data != stack.top()){
+			return false;
+		}
+		stack.pop();
+		L = L->next;
+	}
+
+	return true;
+}
+
+//优化一下:只压入一半的数据到栈中即可
+//使用快慢指针的方式
+//判断一个链表是否是回文结构
+bool isPalindromeListOptimize(LinkList L){
+	
+	stack<int>stack;
+	LNode *right;
+	LNode *cur;
+	
+	right = L->next;
+	cur = L;
+
+	while(cur->next != NULL && cur->next->next != NULL){
+		right = right->next;//慢指针
+		cur = cur->next->next;//当前指针为快指针
+	}
+
+	while(right != NULL){
+		stack.push(right->data);
+		right = right->next;
+	}
+
+	while(!stack.empty()){
+		if(L->data != stack.top()){
+			return false;
+		}
+		stack.pop();
+		L = L->next;
+	}
+	return true;	
+}
+
+
 
 int main(){
 	LinkList A1,A2;
 	cout << "请输入链表A1元素" << endl;
 	createListByEnd(A1);
 	printList(A1);
-	removeLastKthNode(A1,2);
-	//reverseListAssistPointer(A1);
+	if(isPalindromeListOptimize(A1)){
+		cout << "yyyyy" << endl;
+	}else{
+		cout << "nnnnn" << endl;
+	}
 	printList(A1);
 	return 0;
 }
