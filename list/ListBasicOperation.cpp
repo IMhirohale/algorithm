@@ -221,18 +221,185 @@ bool isPalindromeListOptimize(LinkList L){
 	return true;	
 }
 
+//合并两个单链表
+void mergeList(LinkList &L1, LinkList &L2, LinkList &L3){
+
+	LNode *pa,*pb,*pc;
+	pa = L1->next;
+	pb = L2->next;
+	pc = L3 = L1;
+
+	while(pa != NULL & pb != NULL){
+		
+		if(pa->data <= pb->data){
+
+			pc->next = pa; pc = pa; pa = pa->next;
+
+		}else{
+			pc->next = pb; pc = pb; pb = pb->next;
+		}
+		
+	}
+
+	pc->next = pa ? pa : pb;
+    free(L2);	
+}
+
+//判断单链表是否有环，获取第一个进入环的结点
+LNode * getLoopNode(LinkList L){
+	if(L == NULL || L->next == NULL || L->next->next == NULL){
+		return NULL;
+	}
+
+	LNode *slow;
+	LNode *fast;
+
+	slow = L->next;
+	fast = L->next->next;
+    while(slow != fast){
+
+		if(fast->next == NULL || fast->next->next == NULL){
+			return NULL;
+		}
+		slow = slow->next;
+		fast = fast->next->next;
+	}	
+
+	fast = L;
+	while(slow != fast){
+		slow = slow->next;
+		fast = fast->next;
+	}
+	
+	return slow;
+}
+
+//判断两个无环单链表是否相交，返回第一个相交结点
+LNode * noLoop(LinkList L1, LinkList L2){
+	if(L1 == NULL || L2 == NULL){
+		return NULL;
+	}
+
+	LNode *cur1;
+	LNode *cur2;
+
+	cur1 = L1;
+	cur2 = L2;
+
+	int n = 0;
+	while(cur1->next != NULL){
+		n++;
+		cur1 = cur1->next;
+	}
+	while(cur2->next != NULL){
+		n--;
+		cur2 = cur2->next;
+	}
+
+	if(cur1 != cur2){
+		return NULL;
+	}
+	
+	cur1 = n > 0 ? L1 : L2;
+	cur2 = cur1 == L1 ? L2: L1;
+	
+	n = abs(n);
+	while(n != 0){
+		n--;
+		cur1 = cur1->next;
+	}
+
+	while(cur1 != cur2){
+		cur1 = cur1->next;
+		cur2 = cur2->next;
+	}
+	return cur1;
+}
+
+//判断两个有环单链表是否相交，返回第一个相交的结点
+LNode * bothLoop(LinkList L1, LNode *loop1, LinkList L2, LNode *loop2){
+
+	LNode *cur1;
+	LNode *cur2;
+
+	if(loop1 == loop2){
+		cur1 = L1;
+		cur2 = L2;
+		int n = 0;
+
+		while(cur1->next != loop1){
+			n++;
+			cur1 = cur1->next;
+		}
+		while(cur2->next != loop2){
+			n--;
+			cur2 = cur2->next;
+		}
+
+		cur1 = n > 0 ? L1 : L2;
+		cur2 = cur1 == L1 ? L2 : L1;
+		n = abs(n);
+		while(n != 0){
+			n--;
+			cur1 = cur1->next;
+		}
+		
+		while(cur1 != cur2){
+			cur1 = cur1->next;
+			cur2 = cur2->next;
+		}
+		return cur1;
+
+	}else{
+		cur1 = loop1->next;
+		while(cur1 != loop1){
+			if(cur1 == loop2){
+				return loop1;
+			}
+			cur1 = cur1->next;
+		}
+		
+		return NULL;
+	}
+	
+}
+
+//单链表相交的一系列问题
+LNode * getIntersectNode(LinkList L1, LinkList L2){
+
+	if(L1 == NULL || L2 == NULL){
+		return NULL;
+	}
+
+	LNode *loop1;
+	LNode *loop2;
+
+	loop1 = getLoopNode(L1);
+	loop2 = getLoopNode(L2);
+	if(loop1 == NULL && loop2 == NULL){
+		return noLoop(L1,L2);
+	}
+	if(loop1 != NULL && loop2 != NULL){
+		return bothLoop(L1,loop1,L2,loop2);
+	}
+	return NULL;
+}
 
 
 int main(){
-	LinkList A1,A2;
+	LinkList A1,A2,A3;
 	cout << "请输入链表A1元素" << endl;
 	createListByEnd(A1);
+	cout << "请输入链表A2元素" << endl;
+	createListByEnd(A2);
 	printList(A1);
-	if(isPalindromeListOptimize(A1)){
+	printList(A2);
+	//mergeList(A1,A2,A3);
+	//printList(A3);
+	/*if(isPalindromeListOptimize(A1)){
 		cout << "yyyyy" << endl;
 	}else{
 		cout << "nnnnn" << endl;
-	}
-	printList(A1);
+	}*/
 	return 0;
 }
