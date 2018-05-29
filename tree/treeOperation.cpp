@@ -193,6 +193,50 @@ void ListMirror(BiTree T){
 }
 
 
+//二叉树的深度
+int TreeDepth(BiTree T){
+
+	if(T == NULL) return 0;
+
+	int LeftTreeDepth = TreeDepth(T->lchild);
+	int RightTreeDepth = TreeDepth(T->rchild);
+
+	return (LeftTreeDepth > RightTreeDepth) ? LeftTreeDepth + 1 : RightTreeDepth + 1;
+}
+
+int TreeDepth2(BiTree T){
+	
+	if(T == NULL) return 0;
+
+	return max(1 + TreeDepth(T->lchild),1 + TreeDepth(T->rchild));
+}
+
+//层序遍历
+void PrintFromTopToBottom(BiTree T){
+
+	queue<BiTNode *> q;
+	BiTNode *cur;
+
+	cur = T;
+
+	if(cur == NULL) return ;
+
+	q.push(cur);
+
+	while(!q.empty()){
+	
+		cur = q.front();
+		q.pop();
+
+		cout << cur->data << " ";
+
+		if(cur->lchild != NULL) q.push(cur->lchild);
+		if(cur->rchild != NULL) q.push(cur->rchild);
+
+	}
+}
+
+
 int main(){
 
 	BiTree T1;
@@ -200,6 +244,9 @@ int main(){
 	createBiTree(T1);
 	cout << "创建二叉树成功!" << endl;
 
+	cout << "层序遍历：" << endl;
+	PrintFromTopToBottom(T1);
+	cout << endl;
 	cout << "前序遍历：" << endl;
 	preOrderTraverse(T1);
 	cout << endl;
@@ -207,6 +254,10 @@ int main(){
 	cout << "二叉树镜像：" << endl;
 	preOrderTraverse(T1);
 	cout << endl;
+
+	cout << "二叉树深度：" << endl;
+	cout << TreeDepth(T1) << endl;
+	cout << TreeDepth2(T1) << endl;
 
 /*
 	preOrder(T1);
