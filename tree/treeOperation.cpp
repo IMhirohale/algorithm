@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -162,15 +163,52 @@ void posOrder(BiTree T){
 	
 }
 
+//二叉树的镜像
+void ListMirror(BiTree T){
+
+	queue<BiTNode *> q;
+	BiTNode *cur;
+
+	cur = T;
+
+	while(cur){
+
+		swap(cur->lchild,cur->rchild);
+
+		if(cur->lchild != NULL) q.push(cur->lchild);
+		if(cur->rchild != NULL) q.push(cur->rchild);
+
+		if(!q.empty()){
+
+			cur = q.front();
+			q.pop();
+
+		}else{
+			break;
+		}
+	
+	}
+
+	
+}
+
+
 int main(){
 
 	BiTree T1;
 	cout << "请输入二叉树的元素!" << endl;
 	createBiTree(T1);
 	cout << "创建二叉树成功!" << endl;
+
 	cout << "前序遍历：" << endl;
 	preOrderTraverse(T1);
 	cout << endl;
+	ListMirror(T1);
+	cout << "二叉树镜像：" << endl;
+	preOrderTraverse(T1);
+	cout << endl;
+
+/*
 	preOrder(T1);
 	cout << endl;
 	cout << "中序遍历：" << endl;
@@ -183,6 +221,7 @@ int main(){
 	cout << endl;
 	postOrderTraverse(T1);
 	cout << endl;
+	*/
 /*
 请输入二叉树的元素!
 1 2 4 0 0 5 0 0 3 6 0 0 7 0 0
