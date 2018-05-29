@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <stdlib.h> 
 #include<stack>
+#include<vector>
 
 using namespace std;
 
@@ -69,6 +70,43 @@ void printList(LinkList &L){
 	cout << endl;
 }
 
+//从尾到头打印链表
+vector <int> printListFromTailToHead(LinkList L){
+	
+	vector<int> res;
+	
+	while(L != NULL){
+		res.push_back(L->data);
+		L = L->next;
+	}
+	reverse(res.begin(),res.end());
+
+	return res;
+
+}
+
+void printListByStack(LinkList L){
+
+	stack<int> stk;
+
+	while(L != NULL){
+		stk.push(L->data);
+		L = L->next;
+	}
+
+	while(!stk.empty()){
+		
+		cout << stk.top() << " ";
+		stk.pop();
+		
+	}
+	
+	cout << endl;
+
+}
+
+
+
 //输出有序链表的公共部分
 void printListCommomElem(LinkList &head1, LinkList &head2){
 
@@ -118,7 +156,7 @@ void reverseListByCreateListHead(LinkList &L){
 	
 }
 
-//利用辅助指针进行单链表的
+//利用辅助指针进行单链表的反转
 void reverseListAssistPointer(LinkList &L){
 	
 	if(L == NULL || L->next == NULL){
@@ -388,18 +426,18 @@ LNode * getIntersectNode(LinkList L1, LinkList L2){
 
 int main(){
 	LinkList A1,A2,A3;
+	vector<int> res;
 	cout << "请输入链表A1元素" << endl;
 	createListByEnd(A1);
-	cout << "请输入链表A2元素" << endl;
-	createListByEnd(A2);
+	//cout << "请输入链表A2元素" << endl;
+	//createListByEnd(A2);
 	printList(A1);
-	printList(A2);
-	//mergeList(A1,A2,A3);
-	//printList(A3);
-	/*if(isPalindromeListOptimize(A1)){
-		cout << "yyyyy" << endl;
-	}else{
-		cout << "nnnnn" << endl;
-	}*/
+	printListByStack(A1);
+	res = printListFromTailToHead(A1);
+	for(int i = 0; i < res.size(); i++){
+		cout << res[i] << " ";
+	}
+	cout << endl;
+	
 	return 0;
 }
